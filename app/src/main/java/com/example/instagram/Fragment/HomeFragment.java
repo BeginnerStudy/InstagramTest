@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ public class HomeFragment extends Fragment {
     private PostAdapter postAdapter;
     private List<Post> postLists;
 
-    private List<String> followingList;
+    private List<String> followingList, getFollowingList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,6 +73,16 @@ public class HomeFragment extends Fragment {
                     followingList.add(snapshot.getKey());
                 }
 
+                //取另一陣列排除重複的ID  避免相同item產生
+                getFollowingList = new ArrayList<>();
+                int count = followingList.size();
+                for (int i = 0; i < count; i++) {
+                    if (!getFollowingList.contains(followingList.get(i))) {
+                        getFollowingList.add(followingList.get(i));
+                        Log.d("G200=",getFollowingList.get(i));
+                    }
+                }
+
                 readPosts();
             }
 
@@ -93,11 +104,11 @@ public class HomeFragment extends Fragment {
                 postLists.clear();
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()){
                     Post post = snapshot.getValue(Post.class);
-                    for (String id: followingList){
+                    if (post.getPublisher().equals(firebaseUser.getUid())){
+                        postLists.add(post);
+                    }
+                    for (String id: getFollowingList){
                         if (post.getPublisher().equals(id)){
-                            postLists.add(post);
-                        }
-                        if (post.getPublisher().equals(firebaseUser.getUid())){
                             postLists.add(post);
                         }
                     }
