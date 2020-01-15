@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="10dp"
+    tools:context=".RegisterActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:src="@drawable/logo"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_nbackground"
+        android:hint="使用者名稱"
+        android:layout_marginTop="15dp"
+        android:id="@+id/username"
+        android:padding="10dp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_nbackground"
+        android:hint="全名"
+        android:layout_marginTop="15dp"
+        android:id="@+id/fullname"
+        android:padding="10dp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_nbackground"
+        android:hint="您的電子信箱"
+        android:layout_marginTop="15dp"
+        android:id="@+id/email"
+        android:inputType="textEmailAddress"
+        android:padding="10dp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_nbackground"
+        android:hint="密碼"
+        android:layout_marginTop="15dp"
+        android:id="@+id/password"
+        android:inputType="textPassword"
+        android:padding="10dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/register"
+        android:text="註冊"
+        android:textColor="@color/colorPrimary"
+        android:background="@drawable/botton_background"
+        android:layout_marginTop="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="已加入會員?  直接登入"
+        android:textColor="@color/colorBlue500"
+        android:id="@+id/txt_login"
+        android:layout_marginTop="10dp"/>
+
+</LinearLayout>
