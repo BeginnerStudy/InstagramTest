@@ -30,8 +30,20 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
-        //將Fragment設定到FramLayout裡顯示  並預設Fragment位置在Home
-        getSupportFragmentManager().beginTransaction().replace(R.id.framLayout_container,new HomeFragment()).commit();
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null){
+            String publisher = bundle.getString("publisherid");
+
+            SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
+            editor.putString("profileid", publisher);
+            editor.apply();
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.framLayout_container,new ProfileFragment()).commit();
+        }else {
+            //將Fragment設定到FramLayout裡顯示  並預設Fragment位置在Home
+            getSupportFragmentManager().beginTransaction().replace(R.id.framLayout_container,new HomeFragment()).commit();
+        }
+
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =

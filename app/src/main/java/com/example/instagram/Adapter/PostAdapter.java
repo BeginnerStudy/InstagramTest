@@ -2,6 +2,7 @@ package com.example.instagram.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,6 +85,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, CommentsActivity.class);
+                Log.d("D100=",post.getPostid());
                 intent.putExtra("postid", post.getPostid());
                 intent.putExtra("publisherid", post.getPublisher());
                 context.startActivity(intent);

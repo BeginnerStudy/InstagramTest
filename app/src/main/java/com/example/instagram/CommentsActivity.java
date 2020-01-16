@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -12,8 +13,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.instagram.Adapter.CommentsAdater;
+import com.example.instagram.Model.Comment;
 import com.example.instagram.Model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,9 +28,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class CommentsActivity extends AppCompatActivity {
+
+    private RecyclerView recyclerView;
+    private CommentsAdater commentsAdater;
+    private List<Comment> commentList;
 
     EditText addcomment;
     ImageView image_profile;
@@ -52,13 +63,21 @@ public class CommentsActivity extends AppCompatActivity {
             }
         });
 
+        recyclerView = findViewById(R.id.recycle_view);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        commentList = new ArrayList<>();
+        commentsAdater = new CommentsAdater(this, commentList);
+        recyclerView.setAdapter(commentsAdater);
+
         addcomment = findViewById(R.id.add_comment);
         image_profile = findViewById(R.id.image_profile);
         post = findViewById(R.id.post);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        Intent intent = new Intent();
+        Intent intent = getIntent();
         postid = intent.getStringExtra("postid");
         publisherid = intent.getStringExtra("publisherid");
 
@@ -74,6 +93,7 @@ public class CommentsActivity extends AppCompatActivity {
         });
 
         getImage();
+        readComments();
     }
 
     private void addComment() {
@@ -95,6 +115,28 @@ public class CommentsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 Glide.with(getApplicationContext()).load(user.getImageurl()).into(image_profile);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void readComments(){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("留言").child(postid);
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                commentList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Comment comment = snapshot.getValue(Comment.class);
+                    commentList.add(comment);
+                }
+
+                commentsAdater.notifyDataSetChanged();
             }
 
             @Override
