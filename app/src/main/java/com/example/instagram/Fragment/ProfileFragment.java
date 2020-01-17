@@ -43,13 +43,16 @@ public class ProfileFragment extends Fragment {
     TextView posts, followers, following, fullname, bio, username;
     Button edit_button;
 
+    private List<String> mySaves;
+    List<Post> postList_saves;
+
     FirebaseUser firebaseUser;
     String profileid;
 
     ImageButton my_photos, saved_photos;
 
-    RecyclerView recyclerView;
-    MyPhotoAdapter myPhotoAdapter;
+    RecyclerView recyclerView, recyclerView_saves;
+    MyPhotoAdapter myPhotoAdapter, myPhotoAdapter_saves;
     List<Post> postList;
 
     @Override
@@ -82,10 +85,22 @@ public class ProfileFragment extends Fragment {
         myPhotoAdapter = new MyPhotoAdapter(getContext(), postList);
         recyclerView.setAdapter(myPhotoAdapter);
 
+        recyclerView_saves = view.findViewById(R.id.recycle_view_save);
+        recyclerView_saves.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager_saves = new GridLayoutManager(getContext(), 3);//以GridLayout型態載入;spanCount:一橫行載入的item數
+        recyclerView_saves.setLayoutManager(linearLayoutManager_saves);
+        postList_saves = new ArrayList<>();
+        myPhotoAdapter_saves = new MyPhotoAdapter(getContext(), postList_saves);
+        recyclerView_saves.setAdapter(myPhotoAdapter_saves);
+
+        recyclerView.setVisibility(View.VISIBLE);
+        recyclerView_saves.setVisibility(View.GONE);
+
         userInfo();
         getFollowers();
         getNrPosts();
         myPhotos();
+        mySaves();
 
         if (profileid.equals(firebaseUser.getUid())){
             edit_button.setText("編輯個人檔案");
@@ -112,6 +127,22 @@ public class ProfileFragment extends Fragment {
                     FirebaseDatabase.getInstance().getReference().child("追蹤名單").child(profileid)
                             .child("被誰追蹤").child(firebaseUser.getUid()).removeValue();
                 }
+            }
+        });
+
+        my_photos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerView.setVisibility(View.VISIBLE);
+                recyclerView_saves.setVisibility(View.GONE);
+            }
+        });
+
+        saved_photos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerView.setVisibility(View.GONE);
+                recyclerView_saves.setVisibility(View.VISIBLE);
             }
         });
 
@@ -232,6 +263,52 @@ public class ProfileFragment extends Fragment {
                 }
                 Collections.reverse(postList);//反轉陣列內容
                 myPhotoAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void mySaves(){
+        mySaves = new ArrayList<>();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Saves")
+                .child(firebaseUser.getUid());
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    mySaves.add(snapshot.getKey());
+                }
+
+                readSaves();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void readSaves() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("貼文");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                postList_saves.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Post post = snapshot.getValue(Post.class);
+                    for (String id : mySaves){
+                        if (post.getPostid().equals(id)){
+                            postList_saves.add(post);
+                        }
+                    }
+                }
+
+                myPhotoAdapter_saves.notifyDataSetChanged();
             }
 
             @Override
