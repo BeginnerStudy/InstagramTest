@@ -1,6 +1,7 @@
 package com.example.instagram.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.instagram.Adapter.CommentsAdater;
 import com.example.instagram.Adapter.MyPhotoAdapter;
+import com.example.instagram.EditProfileActivity;
 import com.example.instagram.Model.Post;
 import com.example.instagram.Model.User;
 import com.example.instagram.R;
@@ -115,7 +117,7 @@ public class ProfileFragment extends Fragment {
                 String btn = edit_button.getText().toString();
 
                 if (btn.equals("編輯個人檔案")){
-
+                    startActivity(new Intent(getContext(), EditProfileActivity.class));
                 }else if (btn.equals("開始追蹤")){
                     FirebaseDatabase.getInstance().getReference().child("追蹤名單").child(firebaseUser.getUid())
                             .child("追蹤中").child(profileid).setValue(true);
