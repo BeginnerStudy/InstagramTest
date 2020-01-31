@@ -85,7 +85,7 @@ public class CommentsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (addcomment.getText().toString().equals("")){
-                    Toast.makeText(CommentsActivity.this, "留言不可以空白",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CommentsActivity.this, "請輸入留言",Toast.LENGTH_SHORT).show();
                 }else {
                     addComment();
                 }
@@ -104,7 +104,20 @@ public class CommentsActivity extends AppCompatActivity {
         hashMap.put("publisher", firebaseUser.getUid());
 
         reference.push().setValue(hashMap);
+        addNotifications();
         addcomment.setText("");
+    }
+
+    private void addNotifications(){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("通知").child(publisherid);
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("userid", firebaseUser.getUid());
+        hashMap.put("text", "對你的貼文留言: "+addcomment.getText().toString());
+        hashMap.put("postid", postid);
+        hashMap.put("ispost", true);
+
+        reference.push().setValue(hashMap);
     }
 
     private void getImage(){

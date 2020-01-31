@@ -37,6 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class ProfileFragment extends Fragment {
@@ -123,6 +124,8 @@ public class ProfileFragment extends Fragment {
                             .child("追蹤中").child(profileid).setValue(true);
                     FirebaseDatabase.getInstance().getReference().child("追蹤名單").child(profileid)
                             .child("被誰追蹤").child(firebaseUser.getUid()).setValue(true);
+
+                    addNotifications();
                 }else if (btn.equals("追蹤中")){
                     FirebaseDatabase.getInstance().getReference().child("追蹤名單").child(firebaseUser.getUid())
                             .child("追蹤中").child(profileid).removeValue();
@@ -149,6 +152,18 @@ public class ProfileFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void addNotifications(){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("通知").child(profileid);
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("userid", firebaseUser.getUid());
+        hashMap.put("text", "開始追蹤你");
+        hashMap.put("postid", "");
+        hashMap.put("ispost", false);
+
+        reference.push().setValue(hashMap);
     }
 
     private void userInfo(){

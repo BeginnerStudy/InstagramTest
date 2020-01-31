@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -87,6 +88,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
                             .child("追蹤中").child(user.getId()).setValue(true);
                     FirebaseDatabase.getInstance().getReference().child("追蹤名單").child(user.getId())
                             .child("被誰追蹤").child(firebaseUser.getUid()).setValue(true);
+
+                    addNotifications(user.getId());
                 }else {
                     FirebaseDatabase.getInstance().getReference().child("追蹤名單").child(firebaseUser.getUid())
                             .child("追蹤中").child(user.getId()).removeValue();
@@ -118,6 +121,18 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
             image_profile = itemView.findViewById(R.id.image_profile);
             btn_follow = itemView.findViewById(R.id.btn_follow);
         }
+    }
+
+    private void addNotifications(String userid){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("通知").child(userid);
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("userid", firebaseUser.getUid());
+        hashMap.put("text", "開始追蹤你");
+        hashMap.put("postid", "");
+        hashMap.put("ispost", false);
+
+        reference.push().setValue(hashMap);
     }
 
     private void isFollowing(final String userid, final Button button){
