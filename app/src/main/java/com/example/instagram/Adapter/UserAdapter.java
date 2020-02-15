@@ -1,6 +1,7 @@
 package com.example.instagram.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.instagram.Fragment.ProfileFragment;
+import com.example.instagram.MainActivity;
 import com.example.instagram.Model.User;
 import com.example.instagram.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,12 +36,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
 
     private Context context;
     private List<User> users;
+    private boolean isfragment;
 
     private FirebaseUser firebaseUser;
 
-    public UserAdapter(Context context, List<User> users) {
+    public UserAdapter(Context context, List<User> users, boolean isfragment) {
         this.context = context;
         this.users = users;
+        this.isfragment = isfragment;
     }
 
     @NonNull
@@ -71,12 +75,18 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-                editor.putString("profileid", user.getId());
-                editor.apply();
+                if (isfragment) {
+                    SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                    editor.putString("profileid", user.getId());
+                    editor.apply();
 
-                ((FragmentActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.framLayout_container,
-                        new ProfileFragment()).commit();
+                    ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.framLayout_container,
+                            new ProfileFragment()).commit();
+                }else {
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.putExtra("publisherid", user.getId());
+                    context.startActivity(intent);
+                }
             }
         });
 

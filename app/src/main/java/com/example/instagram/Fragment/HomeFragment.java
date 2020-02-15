@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.example.instagram.Adapter.PostAdapter;
 import com.example.instagram.Model.Post;
@@ -37,6 +38,8 @@ public class HomeFragment extends Fragment {
 
     private List<String> followingList, getFollowingList;
 
+    ProgressBar progressBar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -48,6 +51,8 @@ public class HomeFragment extends Fragment {
         linearLayoutManager.setReverseLayout(true);//反轉整個recyclerView
         linearLayoutManager.setStackFromEnd(true);//設定recyclerView新添加的item從下方新增
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        progressBar = view.findViewById(R.id.progress_circular);
 
         postLists = new ArrayList<>();
         postAdapter = new PostAdapter(getContext(), postLists);
@@ -115,6 +120,7 @@ public class HomeFragment extends Fragment {
                 }
 
                 postAdapter.notifyDataSetChanged();
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override

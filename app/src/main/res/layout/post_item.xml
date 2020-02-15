@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -15,29 +16,36 @@
             android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image_profile"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
-                android:id="@+id/image_profile"
-                android:src="@mipmap/ic_launcher"/>
+                android:src="@mipmap/ic_launcher" />
 
             <TextView
+                android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/username"
                 android:layout_gravity="center_vertical"
-                android:textSize="16dp"
-                android:textStyle="bold"
+                android:text="username"
                 android:textColor="@color/colorPrimaryDark"
-                android:text="username"/>
+                android:textSize="16dp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
-        <ImageView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/post_image"
-            android:src="@mipmap/ic_launcher"/>
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/post_image"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:src="@mipmap/ic_launcher"
+                app:layout_constraintDimensionRatio="1:1" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -45,64 +53,64 @@
             android:padding="8dp">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
                 android:id="@+id/like"
-                android:src="@drawable/ic_like"/>
-
-            <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:id="@+id/comment"
-                android:src="@drawable/ic_comment"
-                android:layout_toEndOf="@+id/like"
-                android:layout_marginStart="10dp"/>
+                android:src="@drawable/ic_like" />
 
             <ImageView
+                android:id="@+id/comment"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/like"
+                android:src="@drawable/ic_comment" />
+
+            <ImageView
+                android:id="@+id/save"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
-                android:id="@+id/save"
-                android:src="@drawable/ic_savee_black"/>
+                android:src="@drawable/ic_savee_black" />
 
         </RelativeLayout>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textStyle="bold"
             android:id="@+id/likes"
-            android:textColor="@color/colorPrimaryDark"
-            android:text="10 Likes"/>
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:textStyle="bold"
+            android:text="10 Likes"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@+id/pulisher"
-            android:textColor="@color/colorPrimaryDark"
-            android:text="username"/>
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:textStyle="bold"
-            android:id="@+id/description"
+            android:text="username"
             android:textColor="@color/colorPrimaryDark"
-            android:text="description"/>
+            android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="description"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/comments"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp"
-            android:id="@+id/comments"
-            android:textColor="@color/colorAccent"
-            android:text="View all 20 Comments"/>
+            android:text="View all 20 Comments"
+            android:textColor="@color/colorAccent" />
 
     </LinearLayout>
 
